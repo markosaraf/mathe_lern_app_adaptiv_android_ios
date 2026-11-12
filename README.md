@@ -1,29 +1,29 @@
-# Mathe mit Katzen — adaptiv für Android und iOS
+# Mathe mit Katzen — adaptive learning for Android and iOS
 
-Ich habe meine Lern-App aus der [Maturarbeit](https://github.com/markosaraf/mathe_lern_app) weiterentwickelt und um adaptives Lernen, Lernprofile, Statistiken und Katzenbelohnungen erweitert. Diese Version ist für Android und iPhone/iPad ausgelegt. Meine ursprüngliche Matura-Version bleibt unverändert.
+I have further developed the learning app from my [Matura project](https://github.com/markosaraf/mathe_lern_app), adding adaptive learning, learner profiles, statistics and cat rewards. This version is designed for Android and iPhone/iPad. My original Matura version remains unchanged.
 
-## Was umgesetzt ist
+## Implemented features
 
-- **Lokale Profile und dauerhafte Lernstände:** Name, Antworten, Fehler, Antwortzeiten, Punkte und Katzen bleiben nach einem Neustart erhalten. Profile können angelegt, gewechselt, umbenannt und gelöscht werden.
-- **Adaptive Aufgaben:** Falsch oder langsam beantwortete Aufgaben werden häufiger wiederholt. Bei Schwierigkeiten wird der Zahlenraum im Training vorübergehend kleiner. Die Challenge-Zeit passt sich an die bisherigen Antwortzeiten an.
-- **Fortschritt und Statistiken:** Trefferquote, Antwortzeit, Fortschritt je Rechengruppe, Aktivität der letzten sieben Tage und Übungsverlauf.
-- **Punkte und Katzenfutter:** Richtige Antworten bringen Punkte. Diese lassen sich für Futter für die freigeschalteten Katzen ausgeben.
-- **Alle neun ursprünglichen Gruppen:** Addition, Subtraktion und Multiplikation jeweils bis 10, 20 und 100. Zehn richtige Antworten in Folge innerhalb der Challenge-Zeit schalten die zugehörige Katze frei. Fehlversuche sind nicht begrenzt.
-- **Zusätzliche Lernhilfen:** Training ohne Zeitdruck, neun Aufgaben zur ersten Orientierung, empfohlener Lernpfad, kurze Erklärungen und Rückmeldungen. Alle Gruppen bleiben frei wählbar.
-- **Deutsch und Englisch**, Touch-Ziffernfeld, Pause und automatische Pause beim Verlassen der App.
+- **Local profiles and persistent progress:** Names, answers, mistakes, response times, points and cats are saved across app restarts. Profiles can be created, switched, renamed and deleted.
+- **Adaptive exercises:** Questions answered incorrectly or slowly are repeated more often. When a learner struggles, practice temporarily uses a smaller number range. Challenge timing adapts to previous response times.
+- **Progress and statistics:** Accuracy, response times, progress in each arithmetic group, activity over the past seven days and practice history.
+- **Points and cat food:** Correct answers earn points, which can be spent on food for unlocked cats.
+- **All nine original groups:** Addition, subtraction and multiplication with numbers up to 10, 20 and 100. Ten consecutive correct answers within the challenge time unlock the corresponding cat. There is no limit on attempts.
+- **Additional learning support:** Untimed practice, a nine-question initial assessment, a recommended learning path, short explanations and feedback. Every group remains freely selectable.
+- **German and English**, an on-screen number pad, pause controls and automatic pausing when leaving the app.
 
-Die Zuordnung zu den ursprünglichen Dokumenten und die konkreten Anpassungsregeln stehen in [docs/IMPLEMENTIERUNG.md](docs/IMPLEMENTIERUNG.md).
+The relationship to my original project documents and the adaptation rules are documented in [docs/IMPLEMENTIERUNG.md](docs/IMPLEMENTIERUNG.md).
 
-## Lokal starten
+## Run locally
 
-Getestet mit Flutter **3.50.0 stable**, Dart **3.14.0**. Für diese Flutter-Version wird Material über `material_ui` eingebunden. `pubspec.lock` ist eingecheckt.
+Tested with Flutter **3.50.0 stable** and Dart **3.14.0**. This Flutter version uses the `material_ui` package for Material components. `pubspec.lock` is committed.
 
 ```sh
 flutter pub get
 flutter run
 ```
 
-Android benötigt das Android SDK und eine kompatible Java-Installation. iOS benötigt macOS und Xcode. Die Mindestversionen ergeben sich aus der Android-Konfiguration beziehungsweise iOS 15.0.
+Android requires the Android SDK and a compatible Java installation. iOS requires macOS and Xcode. Minimum platform versions are defined in the Android configuration and set to iOS 15.0 for Apple devices.
 
 ```sh
 flutter analyze
@@ -33,23 +33,23 @@ flutter build ios --simulator --debug
 flutter build ios --release --no-codesign
 ```
 
-Die Android-APK liegt unter `build/app/outputs/flutter-apk/app-release.apk`. Sie ist derzeit **zum lokalen Testen mit dem Debug-Schlüssel signiert**, nicht für eine Store-Veröffentlichung. Vor einer Veröffentlichung einen eigenen Upload-Schlüssel einrichten. Ein iOS-Gerätebuild muss vor der Installation mit dem passenden Apple-Team und Provisioning signiert werden. Der Simulator-Build ist nur für den Simulator bestimmt.
+The Android APK is generated at `build/app/outputs/flutter-apk/app-release.apk`. It is currently **signed with a debug key for local testing**, not for store distribution. Configure a dedicated upload key before publishing. An iOS device build must be signed with the appropriate Apple team and provisioning before installation. The simulator build runs only in the simulator.
 
-Auf dem Entwicklungs-Mac liegt Flutter separat unter `~/development/matura-modern/flutter`. Falls iCloud im Dokumente-Ordner Finder-Metadaten an Frameworks anhängt und Xcode deshalb die Signierung verweigert, das Projekt zum Bauen ausserhalb von iCloud kopieren, zum Beispiel nach `~/development/matura-adaptiv-build`.
+On my development Mac, Flutter is installed separately at `~/development/matura-modern/flutter`. If iCloud adds Finder metadata to frameworks in the Documents folder and Xcode consequently refuses to sign them, copy the project outside iCloud before building, for example to `~/development/matura-adaptiv-build`.
 
-## Daten und Datenschutz
+## Data and privacy
 
-Die App funktioniert offline, ohne Konto, Server oder Tracking. Profile sind lokale Lernprofile und nicht passwortgeschützt. Personen mit Zugriff auf dieselbe App können die Profile wechseln. Ein Spitzname genügt.
+The app works offline, without an online account, server or tracking. Learner profiles are local and are not password-protected. Anyone with access to the same app installation can switch profiles. A nickname is sufficient.
 
-Die Daten liegen als `learning-v1.json` im privaten Anwendungsdatenverzeichnis. Schreibvorgänge werden nacheinander ausgeführt und atomar ersetzt. Eine lokale Sicherung ermöglicht die Wiederherstellung bei einer beschädigten Datei. Ein Speicherfehler wird in der App angezeigt. Eine Deinstallation kann die lokalen Daten entfernen. Es gibt keine Synchronisierung zwischen Geräten.
+Data is stored in `learning-v1.json` in the private application data directory. Writes are serialized and files are replaced atomically. A local backup allows recovery from a corrupted file. Storage errors are displayed in the app. Uninstalling the app may remove local data. There is no synchronization between devices.
 
-## Aufbau
+## Project structure
 
-- `lib/domain/learning.dart`: Aufgaben, Lernstatistik, Anpassungsregeln, Übungssitzung
-- `lib/data/store.dart`: Profile und lokale Speicherung
-- `lib/ui/app.dart`: Lernübersicht, Katzen, Fortschritt und Übungsbildschirm
-- `test/`: Verhalten, Speicherung und Bedienabläufe auf Telefon-/Tablet-Grössen
-- `android/`, `ios/`: Native App-Projekte
-- `lib/images/`: Die ursprünglichen neun Katzenbilder
+- `lib/domain/learning.dart`: Exercises, learning statistics, adaptation rules and practice sessions
+- `lib/data/store.dart`: Profiles and local storage
+- `lib/ui/app.dart`: Learning overview, cats, progress and practice screens
+- `test/`: Behaviour, storage and interaction tests at phone and tablet sizes
+- `android/`, `ios/`: Native app projects
+- `lib/images/`: The original nine cat images
 
-Die Anpassungsregeln sind nachvollziehbare Heuristiken. Die kurze Einstufung ist eine Orientierung und kein standardisierter Leistungstest.
+The adaptation rules use transparent heuristics. The short initial assessment provides guidance and is not a standardized achievement test.
