@@ -1,6 +1,6 @@
 # Mathe mit Katzen — adaptiv für Android und iOS
 
-Weiterentwicklung von [mathe_lern_app](https://github.com/markosaraf/mathe_lern_app), Markos Maturaprojekt. Das ursprüngliche Repository bleibt unverändert. Diese Version enthält vollständige Flutter-Projekte für Android und iPhone/iPad.
+Ich habe meine Lern-App aus der [Maturarbeit](https://github.com/markosaraf/mathe_lern_app) weiterentwickelt und um adaptives Lernen, Lernprofile, Statistiken und Katzenbelohnungen erweitert. Diese Version ist für Android und iPhone/iPad ausgelegt. Meine ursprüngliche Matura-Version bleibt unverändert.
 
 ## Was umgesetzt ist
 
