@@ -1,66 +1,47 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'screens/homepage.dart';
-import 'screens/exercises.dart';
-import 'screens/exercise.dart';
-import 'screens/cats.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:path_provider/path_provider.dart';
+import 'data/store.dart';
+import 'ui/app.dart';
 
-void main() {
-  final controller = Get.put(BottomNavigationBarController());
-  runApp(GetMaterialApp(
-    debugShowCheckedModeBanner: false,
-    defaultTransition: Transition.fade,
-    initialRoute: '/home',
-    onGenerateRoute: controller.onGenerateRoute,
-    getPages: [
-      GetPage(name: '/home', page: () => HomePage(), binding: HomeBinding()),
-      GetPage(name: '/exercises', page: () => ExercisesPage()),
-      GetPage(name: '/exercise', page: () => ExercisePage()),
-      GetPage(name: '/cats', page: () => CatsPage()),
-    ],
-  ));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final store = LearningStore(await getApplicationSupportDirectory());
+  await store.load();
+  runApp(MathApp(store: store));
 }
 
-class HomeBinding extends Bindings {
+class MathApp extends StatelessWidget {
+  final LearningStore store;
+  const MathApp({super.key, required this.store});
   @override
-  void dependencies() {
-    Get.lazyPut(() => BottomNavigationBarController());
-  }
-}
-
-class BottomNavigationBarController extends GetxController {
-  static BottomNavigationBarController get to => Get.find();
-
-  var currentIndex = 0.obs;
-
-  final pages = <String>['/home', '/exercises', '/cats'];
-
-  void changePage(int index) {
-    currentIndex.value = index;
-    Get.toNamed(pages[index]);
-  }
-
-  Route? onGenerateRoute(RouteSettings settings) {
-    if (settings.name == '/home')
-      return GetPageRoute(
-        settings: settings,
-        page: () => HomePage(),
-        //binding: BrowseBinding(),
-      );
-
-    if (settings.name == '/exercises')
-      return GetPageRoute(
-        settings: settings,
-        page: () => ExercisesPage(),
-        //binding: HistoryBinding(),
-      );
-
-    if (settings.name == '/cats')
-      return GetPageRoute(
-        settings: settings,
-        page: () => CatsPage(),
-        //binding: SettingsBinding(),
-      );
-    return null;
-  }
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: store,
+    builder: (context, _) => MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Mathe mit Katzen',
+      locale: Locale(store.language),
+      supportedLocales: const [Locale('de'), Locale('en')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff26786f)),
+        scaffoldBackgroundColor: const Color(0xfffffaf0),
+        useMaterial3: true,
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+        ),
+        cardTheme: CardThemeData(
+          elevation: 0,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+            side: const BorderSide(color: Color(0xffd8e5df)),
+          ),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(minimumSize: const Size(48, 50)),
+        ),
+      ),
+      home: Home(store: store),
+    ),
+  );
 }
